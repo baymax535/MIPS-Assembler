@@ -1,7 +1,11 @@
 import java.util.Scanner;
+
 public class MIPSAssembler {
 	public static void main(String[] args) {
-		
+		//get input MIPS from command line
+		//create InstructionParser object and parse
+		//Create instructionConverter object and convert
+		//output
 		
 		Scanner stdIn = new Scanner(System.in);
 		
