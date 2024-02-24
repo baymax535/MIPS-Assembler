@@ -1,3 +1,3 @@
 ReadMe 
 ### MIPS Assembler
-####Team : Labib Alam, Jacob Huang, Dennis Smith.
+#### Team : Labib Alam, Jacob Huang, Dennis Smith.
