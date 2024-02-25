@@ -60,6 +60,11 @@ public class InstructionParser {
         //TODO
     }
 
+    // Helper method to extract operands from the instruction component
+    private String[] extractOperands(String[] components) {
+        // TODO
+    }
+
     //maybe more methods if needed
 
 }
