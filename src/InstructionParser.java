@@ -7,6 +7,36 @@ public class InstructionParser {
     public InstructionParser() {
         //TODO
     }
+    
+    public class ParsedInstruction {
+    	private String mnemonic;
+    	private String targetRegister;
+    	private String sourceRegister1;
+    	private String sourceRegister2;
+    	
+    	ParsedInstruction(String mnemonic, String targetRegister, String sourceRegister1, String sourceRegister2) {
+    		this.mnemonic = mnemonic;
+    		this.targetRegister = targetRegister;
+    		this.sourceRegister1 = sourceRegister1;
+    		this.sourceRegister2 = sourceRegister2;
+    	}
+    	
+    	public String getMnemonic() {
+    		return mnemonic;
+    	}
+    	
+    	public String getTarget() {
+    		return targetRegister;
+    	}
+    	
+    	public String getSourceRegister1() {
+    		return sourceRegister1;
+    	}
+    	
+    	public String getSourceRegister2() {
+    		return sourceRegister2;
+    	}
+    }
 
     /**
      * Parses a MIPS assembly instruction into its components.
@@ -17,8 +47,16 @@ public class InstructionParser {
      * @throws IllegalArgumentException If the instruction format is invalid or
      *                                  unsupported.
      */
-    public ParsedInstruction parse(String instruction){
-        //TODO
+    public ParsedInstruction parse(String instruction) {
+    	instruction = removeComments(instruction);
+    	String[] arr = splitComponents(instruction);
+    	boolean isValid = validateComponents(arr);
+    	ParsedInstruction ans = null;
+    	if(isValid) {
+    		
+    	} else return ans;
+    	
+    	return ans;
     }
 
     //Helper
@@ -54,7 +92,7 @@ public class InstructionParser {
      *         subsequent elements are the operands.
      */
     
-    public String[] splitComponenets(String instruction){
+    public String[] splitComponents(String instruction){
         //TODO
     	String[] parts = instruction.split(" `",3);//Spliting the windows instruction at `
     	if (parts.length != 3) {
@@ -80,7 +118,6 @@ public class InstructionParser {
         }
         // Validate operands
         
-        
         return true;	
     }
 
@@ -88,8 +125,9 @@ public class InstructionParser {
     private String[] extractOperands(String[] components) {
         // TODO
     	String[] operands = new String[2];
-    	operands[0] = components[1];
-    	operands[1] = components[2];
+    	if(components[2].contains(", ")) {
+    		operands = components[2].split(", ", 2);
+    	}
     	return operands;
     }
 
@@ -111,13 +149,72 @@ public class InstructionParser {
     }
 
     private boolean isValidOperandCount(String mnemonic, int operandCount) {
-        // Add logic to check if the operand count is valid for the given mnemonic
-        // Return true if valid, false otherwise
-    	//TODO
-        return false;
+    	
+    	if (mnemonic.equals("add")) {
+		    System.out.println("add please");
+		} 
+		
+		else if (mnemonic.equals("addiu")) {
+		    System.out.println("addiu please");
+		} 
+		
+		else if (mnemonic.equals("and")) {
+		    System.out.println("and please");
+		} 
+		
+		else if (mnemonic.equals("andi")) {
+		    System.out.println("andi please");
+		} 
+		
+		else if (mnemonic.equals("beq")) {
+		    System.out.println("beq please");
+		} 
+		
+		else if (mnemonic.equals("bne")) {
+		    System.out.println("bne please");
+		} 
+		
+		else if (mnemonic.equals("j")) {
+		    System.out.println("j please");
+		} 
+		
+		else if (mnemonic.equals("lui")) {
+		    System.out.println("lui please");
+		} 
+		
+		else if (mnemonic.equals("lw")) {
+		    System.out.println("lw please");
+		} 
+		
+		else if (mnemonic.equals("or")) {
+		    System.out.println("or please");
+		} 
+		
+		else if (mnemonic.equals("ori")) {
+		    System.out.println("ori please");
+		} 
+		
+		else if (mnemonic.equals("slt")) {
+		    System.out.println("slt please");
+		} 
+		
+		else if (mnemonic.equals("sub")) {
+		    System.out.println("sub please");
+		} 
+		
+		else if (mnemonic.equals("sw")) {
+		    System.out.println("sw please");
+		} 
+		
+		else if (mnemonic.equals("syscall")) {
+		    System.out.println("syscall please");
+		} 
+		
+		else return false;
+    	return true;
     }
 
-    private boolean isValidOperand(String operand) {
+    private boolean isValidOperand(String[] operand) {
         // Add logic to check if the operand format is valid
         // Return true if valid, false otherwise
     	//TODO
