@@ -56,7 +56,7 @@ public class InstructionParser {
     
     public String[] splitComponenets(String instruction){
         //TODO
-    	String[] parts = instruction.split(" `",3);
+    	String[] parts = instruction.split(" `",3);//Spliting the windows instruction at `
     	if (parts.length != 3) {
             throw new IllegalArgumentException("Invalid number of components in the instruction.");
         }
@@ -74,13 +74,54 @@ public class InstructionParser {
      */
     private boolean validateComponents(String[] components){
         //TODO
+    	// Validate mnemonic
+        if (!isValidMnemonic(components[0])) {
+            return false;
+        }
+        // Validate operands
+        
+        
+        return true;	
     }
 
     // Helper method to extract operands from the instruction component
     private String[] extractOperands(String[] components) {
         // TODO
+    	String[] operands = new String[2];
+    	operands[0] = components[1];
+    	operands[1] = components[2];
+    	return operands;
     }
 
     //maybe more methods if needed
+    
+    private boolean isValidMnemonic(String mnemonic) {
+        // List of valid mnemonics
+        String[] validMnemonics = {
+            "add", "addiu", "and", "andi", "beq", "bne", "j", "lui", "lw", "or", "ori", "slt", "sub", "sw", "syscall"
+        };
+
+        // Check if the mnemonic is in the list of valid mnemonics
+        for (int i = 0; i< validMnemonics.length;i++) {
+            if (validMnemonics[i].equals(mnemonic)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isValidOperandCount(String mnemonic, int operandCount) {
+        // Add logic to check if the operand count is valid for the given mnemonic
+        // Return true if valid, false otherwise
+    	//TODO
+        return false;
+    }
+
+    private boolean isValidOperand(String operand) {
+        // Add logic to check if the operand format is valid
+        // Return true if valid, false otherwise
+    	//TODO
+        return false;
+    }
 
 }
