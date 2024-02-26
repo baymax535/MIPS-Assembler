@@ -15,7 +15,12 @@ public class MIPSAssembler {
 		String mnemonic = parts[0];
 		String targetRegister = parts[1];
 		String sourceRegister = parts[2];
-		
+		if(parts[2].contains("#")) {
+			String copy = "";
+			for(int i = 0; i < parts[2].length() && !parts[2].substring(i, + 1).equals("#"); i++) {
+				copy = copy + parts[2].substring(i, i + 1);
+			}
+		}
 		System.out.println("^"+mnemonic+"^"+targetRegister+"^"+sourceRegister+"^");
 		
 		stdIn.close();

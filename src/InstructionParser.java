@@ -33,6 +33,16 @@ public class InstructionParser {
      */
     public String removeComments(String instruction){
         //TODO
+    	String result = instruction;
+    	int index;
+    	for(index = 0;index<result.length();index++) {
+    		if (instruction.charAt(index) == '#') {
+                break;
+            }
+    	}
+    	result = instruction.substring(0, index);
+    	
+    	return result;
     }
 
     /**
@@ -43,8 +53,14 @@ public class InstructionParser {
      * @return An array of String where the first element is the mnemonic and the
      *         subsequent elements are the operands.
      */
+    
     public String[] splitComponenets(String instruction){
         //TODO
+    	String[] parts = instruction.split(" `",3);
+    	if (parts.length != 3) {
+            throw new IllegalArgumentException("Invalid number of components in the instruction.");
+        }
+    	return parts;
     }
 
     /**
