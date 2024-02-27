@@ -9,6 +9,6 @@ public class Util {
      * @return The formatted machine code string.
      */
     public static String formatOutput(String machineCode) {
-        //TODO
+        return machineCode.toLowerCase();
     }
 }
