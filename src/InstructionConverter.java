@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 
 public class InstructionConverter {
 	private String mnemonic;
@@ -10,7 +11,6 @@ public class InstructionConverter {
      * Initializes any necessary state or configurations required for conversion.
      */
     public InstructionConverter(InstructionParser.ParsedInstruction instruction) {
-        // TODO
     	this.mnemonic = instruction.getMnemonic();
     	this.targetRegister = instruction.getTarget();
     	this.sourceRegister1 = instruction.getSourceRegister1();
@@ -26,7 +26,10 @@ public class InstructionConverter {
      * @return A string representing the machine code in hexadecimal format.
      */
     public String convertToMachineCode(InstructionParser.ParsedInstruction instruction) {
-		return null;
+
+
+
+        return null;
         // TODO
     	
     	
@@ -42,7 +45,22 @@ public class InstructionConverter {
      *         instruction.
      */
     private String convertRType(InstructionParser.ParsedInstruction instruction) {
-		return null;
+
+        if (mnemonic.equals("add")) {
+            StringBuilder machineCode = new StringBuilder();
+            machineCode.append("000000");
+            StringBuilder trBinary = new StringBuilder();
+            for (char c : toString().toCharArray()) {
+                byte[] bytes;
+                bytes = toString().getBytes(StandardCharsets.UTF_8);
+                for (byte b : bytes) {
+                    trBinary.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+                }
+            }
+            machineCode.append(trBinary);
+        }
+
+        return null;
         // TODO
     }
 

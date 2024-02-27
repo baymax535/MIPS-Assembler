@@ -6,7 +6,7 @@ public class MIPSAssembler {
 		//create InstructionParser object and parse
 		//Create instructionConverter object and convert
 		//output
-		
+
 	if(args.length == 0){
 		System.out.println("Please provide a MIPS assembly instruction as an argument");
 		return;
