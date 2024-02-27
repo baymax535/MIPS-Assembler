@@ -1,14 +1,20 @@
-//Converts parsed instructions into hexadecimal representation
-public class InstructionConverter {
 
-    /**
+public class InstructionConverter {
+	private String mnemonic;
+	private String targetRegister;
+	private String sourceRegister2;
+	private String sourceRegister1;
+
+	/**
      * Constructs an instance of the InstructionConverter.
      * Initializes any necessary state or configurations required for conversion.
      */
-    public InstructionConverter() {
+    public InstructionConverter(InstructionParser.ParsedInstruction instruction) {
         // TODO
-    	InstructionParser instruction = new InstructionParser();
-    	
+    	this.mnemonic = instruction.getMnemonic();
+    	this.targetRegister = instruction.getTarget();
+    	this.sourceRegister1 = instruction.getSourceRegister1();
+    	this.sourceRegister2 = instruction.getSourceRegister2();
     	
     }
 
@@ -19,7 +25,8 @@ public class InstructionConverter {
      *                    operands of the MIPS instruction.
      * @return A string representing the machine code in hexadecimal format.
      */
-    public String convertToMachineCode(ParsedInstruction instruction) {
+    public String convertToMachineCode(InstructionParser.ParsedInstruction instruction) {
+		return null;
         // TODO
     	
     	
@@ -34,7 +41,8 @@ public class InstructionConverter {
      * @return A string representing the binary machine code for the R-type
      *         instruction.
      */
-    private String convertRType(ParsedInstruction instruction) {
+    private String convertRType(InstructionParser.ParsedInstruction instruction) {
+		return null;
         // TODO
     }
 
@@ -46,7 +54,8 @@ public class InstructionConverter {
      * @return A string representing the binary machine code for the I-type
      *         instruction.
      */
-    private String convertIType(ParsedInstruction instruction) {
+    private String convertIType(InstructionParser.ParsedInstruction instruction) {
+		return null;
         // TODO
     }
 
@@ -58,9 +67,12 @@ public class InstructionConverter {
      * @return A string representing the binary machine code for the J-type
      *         instruction.
      */
-    private String convertJType(ParsedInstruction instruction) {
+    private String convertJType(InstructionParser.ParsedInstruction instruction) {
+		return null;
         // TODO
-    }
+
+
+}
 
     
 }
