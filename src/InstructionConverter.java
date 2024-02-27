@@ -7,6 +7,9 @@ public class InstructionConverter {
      */
     public InstructionConverter() {
         // TODO
+    	InstructionParser instruction = new InstructionParser();
+    	
+    	
     }
 
     /**
@@ -18,6 +21,9 @@ public class InstructionConverter {
      */
     public String convertToMachineCode(ParsedInstruction instruction) {
         // TODO
+    	
+    	
+    	
     }
 
     /**
