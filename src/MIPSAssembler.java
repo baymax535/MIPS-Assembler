@@ -20,7 +20,7 @@ public class MIPSAssembler {
 	InstructionConverter converter = new InstructionConverter();
 	String machineCode = converter.convertToMachineCode(parsedInstruction);
 
-	String formattedMachineCode = Utils.formateOutput(machineCode);
+	String formattedMachineCode = Util.formatOutput(machineCode);
 
 	System.out.println("Machine Code: " + formattedMachineCode);
 	}
