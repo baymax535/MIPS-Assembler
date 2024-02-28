@@ -1,3 +1,4 @@
+
 public class InstructionConverter {
 	private String mnemonic;
 	private String targetRegister;
@@ -9,6 +10,7 @@ public class InstructionConverter {
      * Initializes any necessary state or configurations required for conversion.
      */
     public InstructionConverter(InstructionParser.ParsedInstruction instruction) {
+        // TODO
     	this.mnemonic = instruction.getMnemonic();
     	this.targetRegister = instruction.getTarget();
     	this.sourceRegister1 = instruction.getSourceRegister1();
@@ -24,8 +26,7 @@ public class InstructionConverter {
      * @return A string representing the machine code in hexadecimal format.
      */
     public String convertToMachineCode(InstructionParser.ParsedInstruction instruction) {
-
-        return null;
+		return null;
         // TODO
     	
     	
@@ -34,58 +35,16 @@ public class InstructionConverter {
 
     /**
      * Converts an R-type MIPS instruction to its machine code representation.
-     *
+     * 
      * @param instruction A ParsedInstruction object specific to an R-type
      *                    instruction.
      * @return A string representing the binary machine code for the R-type
      *         instruction.
      */
-    private String String (InstructionParser.ParsedInstruction instruction) {
-        StringBuilder RmachineCode = new StringBuilder();
-        RmachineCode.append("000000");
-        switch (instruction.getMnemonic()) {
-            case "add":
-                RmachineCode.append("100000");
-                appendRegisterValues(RmachineCode, instruction);
-                break;
-
-            case "sub":
-                RmachineCode.append("100010");
-                appendRegisterValues(RmachineCode, instruction);
-                break;
-
-            case "and":
-            RmachineCode.append("100100");
-            appendRegisterValues(RmachineCode, instruction);
-            break;
-
-            case "or":
-                RmachineCode.append("100101");
-                appendRegisterValues(RmachineCode, instruction);
-                break;
-
-            case "slt":
-                RmachineCode.append("101010");
-                appendRegisterValues(RmachineCode, instruction);
-                break;
-
-            case "syscall":
-                RmachineCode.append("001100");
-                appendRegisterValues(RmachineCode, instruction);
-                break;
-        }
-
-        return RmachineCode.toString().toLowerCase().substring(2);
-
+    private String convertRType(InstructionParser.ParsedInstruction instruction) {
+		return null;
+        // TODO
     }
-    private void appendRegisterValues(StringBuilder RmachineCode, InstructionParser.ParsedInstruction instruction) {
-        int rs = Integer.parseInt(sourceRegister1);
-        int rd = Integer.parseInt(targetRegister);
-        int rt = Integer.parseInt(sourceRegister2);
-        RmachineCode.append(String.format("%05X", (rs << 21) | (rt << 16) | (rd << 11)));
-    }
-
-
 
     /**
      * Converts an I-type MIPS instruction to its machine code representation.
@@ -96,54 +55,8 @@ public class InstructionConverter {
      *         instruction.
      */
     private String convertIType(InstructionParser.ParsedInstruction instruction) {
-        String rs = instruction.getSourceRegister1();
-        String rt = instruction.getSourceRegister2();
-        String immediate = "0000000000000000";
-
-        String machineCode = "";
-        String hexImmediate = String.format("%04X", immediate);
-
-        switch (mnemonic) {
-            case "lw":
-            case "sw":
-                int baseAddress = Integer.parseInt(sourceRegister1);
-
-                int offset = 42;
-
-                int finalAddress = baseAddress + offset;
-
-                String hexAddress = String.format("%04X", finalAddress);
-
-                machineCode = "001000" + rt + rs + hexAddress;
-                break;
-
-            case "lui":
-                machineCode = "001111" + rt + "00000" + hexImmediate;
-                break;
-
-            case "addi":
-                machineCode = "0010000" + rt + rs + hexImmediate;
-                break;
-
-            case "ori":
-                machineCode = "001101" + rt + rs + hexImmediate;
-                break;
-
-            case "beq":
-                machineCode = "000100" + rt + rs + hexImmediate;
-                break;
-
-            case "bne":
-                machineCode = "00010" + rt + rs + hexImmediate;
-                break;
-
-            default:
-                // Handle unsupported instructions (e.g., return null or throw exception)
-                break;
-        }
-
-        return machineCode;
-
+		return null;
+        // TODO
     }
 
     /**
@@ -155,30 +68,7 @@ public class InstructionConverter {
      *         instruction.
      */
     private String convertJType(InstructionParser.ParsedInstruction instruction) {
-        String targetLabel = instruction.getTarget(); // Get the target label from parsed instruction
-
-        // Calculate the offset (target address - PC)
-        int currentPC = getProgramCounter(); // Assuming you have a method to get the current PC
-        int targetAddressInt = getInstructionAddress(targetLabel); // Assuming a method to get address from label
-
-        // Check if target address is within range of immediate field (26 bits)
-        if (!isWithinImmediateRange(targetAddressInt, currentPC)) {
-            throw new RuntimeException("Target address out of range for J-type instruction");
-        }
-
-        int offset = targetAddressInt - currentPC;
-
-        // Convert offset to 26-bit hexadecimal string with leading zeros
-        String hexOffset = String.format("%06X", offset & 0x3FFFFFF); // Mask to limit to 26 bits
-
-        // Combine opcode and offset
-        String machineCode = "000010" + hexOffset;
-
-        return machineCode;
-
-
-
-        return null;
+		return null;
         // TODO
 
 
