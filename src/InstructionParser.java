@@ -120,6 +120,21 @@ public class InstructionParser {
         
         return true;	
     }
+    
+    private String getM(String instruction) {
+    	String mnemonic = "";
+    	
+    	String x = "";
+    	for(int i = 0; i < instruction.length(); i++) {
+    		x = instruction.substring(i, i + 1);
+    		if(x.equals(" ")) {
+    			mnemonic = instruction.substring(0, i);
+    			break;
+    		}
+    	}
+    	
+    	return mnemonic;
+    }
 
     // Helper method to extract operands from the instruction component
     private String[] extractOperands(String[] components) {
@@ -150,68 +165,29 @@ public class InstructionParser {
 
     private boolean isValidOperandCount(String mnemonic, int operandCount) {
     	
-    	if (mnemonic.equals("add")) {
-		    System.out.println("add please");
-		} 
-		
-		else if (mnemonic.equals("addiu")) {
-		    System.out.println("addiu please");
-		} 
-		
-		else if (mnemonic.equals("and")) {
-		    System.out.println("and please");
-		} 
-		
-		else if (mnemonic.equals("andi")) {
-		    System.out.println("andi please");
-		} 
-		
-		else if (mnemonic.equals("beq")) {
-		    System.out.println("beq please");
-		} 
-		
-		else if (mnemonic.equals("bne")) {
-		    System.out.println("bne please");
-		} 
-		
-		else if (mnemonic.equals("j")) {
-		    System.out.println("j please");
-		} 
-		
-		else if (mnemonic.equals("lui")) {
-		    System.out.println("lui please");
-		} 
-		
-		else if (mnemonic.equals("lw")) {
-		    System.out.println("lw please");
-		} 
-		
-		else if (mnemonic.equals("or")) {
-		    System.out.println("or please");
-		} 
-		
-		else if (mnemonic.equals("ori")) {
-		    System.out.println("ori please");
-		} 
-		
-		else if (mnemonic.equals("slt")) {
-		    System.out.println("slt please");
-		} 
-		
-		else if (mnemonic.equals("sub")) {
-		    System.out.println("sub please");
-		} 
-		
-		else if (mnemonic.equals("sw")) {
-		    System.out.println("sw please");
-		} 
-		
-		else if (mnemonic.equals("syscall")) {
-		    System.out.println("syscall please");
-		} 
-		
-		else return false;
-    	return true;
+    	switch (mnemonic) {
+        case "add":
+        case "addiu":
+        case "and":
+        case "andi":
+        case "beq":
+        case "bne":
+            return operandCount == 3;
+        case "j":
+            return operandCount == 1;
+        case "lui":
+        case "lw":
+        case "or":
+        case "ori":
+        case "slt":
+        case "sub":
+        case "sw":
+            return operandCount == 2;
+        case "syscall":
+            return operandCount == 0;
+        default:
+            return false; // Return false for unrecognized mnemonics
+    }
     }
 
     private boolean isValidOperand(String[] operand) {
