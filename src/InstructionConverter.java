@@ -38,27 +38,29 @@ public class InstructionConverter {
 
     /**
      * Converts an R-type MIPS instruction to its machine code representation.
-     * 
+     *
      * @param instruction A ParsedInstruction object specific to an R-type
      *                    instruction.
      * @return A string representing the binary machine code for the R-type
      *         instruction.
      */
     private String convertRType(InstructionParser.ParsedInstruction instruction) {
+        StringBuilder machineCode = new StringBuilder();
 
-        if (mnemonic.equals("add")) {
-            StringBuilder machineCode = new StringBuilder();
+        if(instruction.getMnemonic().equals("add")){
             machineCode.append("000000");
-            StringBuilder trBinary = new StringBuilder();
-            for (char c : toString().toCharArray()) {
-                byte[] bytes;
-                bytes = toString().getBytes(StandardCharsets.UTF_8);
-                for (byte b : bytes) {
-                    trBinary.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
-                }
-            }
-            machineCode.append(trBinary);
+            int rd = Integer.parseInt(targetRegister);
+            int rs = Integer.parseInt(sourceRegister1);
+            int rt = Integer.parseInt(sourceRegister2);
+            machineCode.append(String.format("%05X", (rs << 21) | (rt << 16) | (rd << 11)));
+            machineCode.append("100000");
         }
+
+
+        
+
+
+
 
         return null;
         // TODO
