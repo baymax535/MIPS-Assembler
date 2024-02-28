@@ -25,8 +25,6 @@ public class InstructionConverter {
      */
     public String convertToMachineCode(InstructionParser.ParsedInstruction instruction) {
 
-
-
         return null;
         // TODO
     	
@@ -43,51 +41,48 @@ public class InstructionConverter {
      *         instruction.
      */
     private String String (InstructionParser.ParsedInstruction instruction) {
-        StringBuilder machineCode = new StringBuilder();
-        machineCode.append("000000");
+        StringBuilder RmachineCode = new StringBuilder();
+        RmachineCode.append("000000");
         switch (instruction.getMnemonic()) {
             case "add":
-                machineCode.append("100000");
-                appendRegisterValues(machineCode, instruction);
+                RmachineCode.append("100000");
+                appendRegisterValues(RmachineCode, instruction);
                 break;
 
             case "sub":
-                machineCode.append("100010");
-                appendRegisterValues(machineCode, instruction);
+                RmachineCode.append("100010");
+                appendRegisterValues(RmachineCode, instruction);
                 break;
 
             case "and":
-            machineCode.append("100100");
-            appendRegisterValues(machineCode, instruction);
+            RmachineCode.append("100100");
+            appendRegisterValues(RmachineCode, instruction);
             break;
 
             case "or":
-                machineCode.append("100101");
-                appendRegisterValues(machineCode, instruction);
+                RmachineCode.append("100101");
+                appendRegisterValues(RmachineCode, instruction);
                 break;
 
             case "slt":
-                machineCode.append("101010");
-                appendRegisterValues(machineCode, instruction);
+                RmachineCode.append("101010");
+                appendRegisterValues(RmachineCode, instruction);
                 break;
 
             case "syscall":
-                machineCode.append("001100");
-                appendRegisterValues(machineCode, instruction);
+                RmachineCode.append("001100");
+                appendRegisterValues(RmachineCode, instruction);
                 break;
         }
 
+        return RmachineCode.toString().toLowerCase().substring(2);
 
-        return machineCode.toString().toLowerCase().substring(2);
-
-
-        // TODO
     }
-    private void appendRegisterValues(StringBuilder machineCode, InstructionParser.ParsedInstruction instruction) {
+    private void appendRegisterValues(StringBuilder RmachineCode, InstructionParser.ParsedInstruction instruction) {
         int rs = Integer.parseInt(sourceRegister1);
         int rd = Integer.parseInt(targetRegister);
         int rt = Integer.parseInt(sourceRegister2);
-        machineCode.append(String.format("%05X", (rs << 21) | (rt << 16) | (rd << 11)));
+        RmachineCode.append(String.format("%05X", (rs << 21) | (rt << 16) | (rd << 11)));
     }
 
 
@@ -101,8 +96,36 @@ public class InstructionConverter {
      *         instruction.
      */
     private String convertIType(InstructionParser.ParsedInstruction instruction) {
-		return null;
-        // TODO
+        String rs = instruction.getSourceRegister1();
+        String rt = instruction.getSourceRegister2();
+        String immediate = instruction.getImmediate().replace("$", ""); // Remove leading "$"
+
+        String machineCode = "";
+
+        switch (mnemonic) {
+            case "lw":
+            case "sw":
+                int baseAddress = Integer.parseInt(sourceRegister1);
+
+                int offset = 42;
+
+                int finalAddress = baseAddress + offset;
+
+                String hexAddress = String.format("%04X", finalAddress);
+
+                machineCode = "001000" + rt + rs + hexAddress;
+                break;
+
+            // Add cases for other I-type instructions with appropriate logic
+            // ...
+
+            default:
+                // Handle unsupported instructions (e.g., return null or throw exception)
+                break;
+        }
+
+        return machineCode;
+
     }
 
     /**
