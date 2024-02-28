@@ -94,6 +94,31 @@ public class InstructionParser {
     
     public String[] splitComponents(String instruction){
         //TODO
+    	String mnemonic = extractM(instruction);
+    	int operandCount;
+    	switch (mnemonic) {
+        case "add":
+        case "addiu":
+        case "and":
+        case "andi":
+        case "beq":
+        case "bne":
+            operandCount = 3;
+        case "j":
+            operandCount = 2;
+        case "lui":
+        case "lw":
+        case "or":
+        case "ori":
+        case "slt":
+        case "sub":
+        case "sw":
+            operandCount = 3;
+        case "syscall":
+            operandCount = 1;
+        default:
+            return false; // Return false for unrecognized mnemonics
+    }
     	String[] parts = instruction.split(" `",3);//Spliting the windows instruction at `
     	if (parts.length != 3) {
             throw new IllegalArgumentException("Invalid number of components in the instruction.");
@@ -121,7 +146,7 @@ public class InstructionParser {
         return true;	
     }
     
-    private String getM(String instruction) {
+    private String extractM(String instruction) {
     	String mnemonic = "";
     	
     	String x = "";
@@ -139,6 +164,7 @@ public class InstructionParser {
     // Helper method to extract operands from the instruction component
     private String[] extractOperands(String[] components) {
         // TODO
+    	
     	String[] operands = new String[2];
     	if(components[2].contains(", ")) {
     		operands = components[2].split(", ", 2);
