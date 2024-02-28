@@ -137,10 +137,6 @@ public class InstructionConverter {
                 machineCode = "00010" + rt + rs + hexImmediate;
                 break;
 
-                //Must finnish the JUMP instruction
-//            case"j":
-//                machineCode = "000010" + INSTCT_INDEX
-
             default:
                 // Handle unsupported instructions (e.g., return null or throw exception)
                 break;
@@ -159,7 +155,30 @@ public class InstructionConverter {
      *         instruction.
      */
     private String convertJType(InstructionParser.ParsedInstruction instruction) {
-		return null;
+        String targetLabel = instruction.getTarget(); // Get the target label from parsed instruction
+
+        // Calculate the offset (target address - PC)
+        int currentPC = getProgramCounter(); // Assuming you have a method to get the current PC
+        int targetAddressInt = getInstructionAddress(targetLabel); // Assuming a method to get address from label
+
+        // Check if target address is within range of immediate field (26 bits)
+        if (!isWithinImmediateRange(targetAddressInt, currentPC)) {
+            throw new RuntimeException("Target address out of range for J-type instruction");
+        }
+
+        int offset = targetAddressInt - currentPC;
+
+        // Convert offset to 26-bit hexadecimal string with leading zeros
+        String hexOffset = String.format("%06X", offset & 0x3FFFFFF); // Mask to limit to 26 bits
+
+        // Combine opcode and offset
+        String machineCode = "000010" + hexOffset;
+
+        return machineCode;
+
+
+
+        return null;
         // TODO
 
 
