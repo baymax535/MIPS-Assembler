@@ -98,9 +98,10 @@ public class InstructionConverter {
     private String convertIType(InstructionParser.ParsedInstruction instruction) {
         String rs = instruction.getSourceRegister1();
         String rt = instruction.getSourceRegister2();
-        String immediate = instruction.getImmediate().replace("$", ""); // Remove leading "$"
+        String immediate = "0000000000000000";
 
         String machineCode = "";
+        String hexImmediate = String.format("%04X", immediate);
 
         switch (mnemonic) {
             case "lw":
@@ -116,8 +117,29 @@ public class InstructionConverter {
                 machineCode = "001000" + rt + rs + hexAddress;
                 break;
 
-            // Add cases for other I-type instructions with appropriate logic
-            // ...
+            case "lui":
+                machineCode = "001111" + rt + "00000" + hexImmediate;
+                break;
+
+            case "addi":
+                machineCode = "0010000" + rt + rs + hexImmediate;
+                break;
+
+            case "ori":
+                machineCode = "001101" + rt + rs + hexImmediate;
+                break;
+
+            case "beq":
+                machineCode = "000100" + rt + rs + hexImmediate;
+                break;
+
+            case "bne":
+                machineCode = "00010" + rt + rs + hexImmediate;
+                break;
+
+                //Must finnish the JUMP instruction
+//            case"j":
+//                machineCode = "000010" + INSTCT_INDEX
 
             default:
                 // Handle unsupported instructions (e.g., return null or throw exception)
