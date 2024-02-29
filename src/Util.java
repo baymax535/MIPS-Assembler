@@ -22,10 +22,6 @@ public class Util {
         registerMap.put("$at", 1);
         registerMap.put("$v0", 2);
         registerMap.put("$v1", 3);
-        registerMap.put("$v2", 4);
-        registerMap.put("$v3", 5);
-        registerMap.put("$v4", 6);
-        registerMap.put("$v5", 7);
 
         registerMap.put("$k0", 26);
         registerMap.put("$k1", 27);
