@@ -10,6 +10,7 @@ public class MIPSAssembler {
 		}
 
 		try {
+			//Milestone 1
 			String instruction = args[0];
 			InstructionParser parser = new InstructionParser(instruction);
 			String operation = parser.getOperation();
@@ -18,6 +19,13 @@ public class MIPSAssembler {
 			String machineCode = InstructionConverter.convertToMachineCode(operation, arguments);
 
 			System.out.println(machineCode);
+			
+			//Milestone 2
+			String inputFile = args[0];
+	        MIPSFileProcessor fileProcessor = new MIPSFileProcessor();
+	        
+	        fileProcessor.processMIPSFile(inputFile);
+	        
 		} catch (Exception e) {
 			System.exit(1);
 		}
