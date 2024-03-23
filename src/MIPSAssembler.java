@@ -6,7 +6,6 @@ public class MIPSAssembler {
 		// output
 
 		if (args.length != 1) {
-			// System.err.println("Usage: java MIPSAssembler \"<instruction>\"");
 			System.exit(1);
 		}
 
@@ -20,8 +19,6 @@ public class MIPSAssembler {
 
 			System.out.println(machineCode);
 		} catch (Exception e) {
-			// System.err.println("Error processing the instruction: " + e.getMessage());
-			// e.printStackTrace();
 			System.exit(1);
 		}
 	}
