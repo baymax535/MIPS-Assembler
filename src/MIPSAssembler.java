@@ -10,15 +10,15 @@ public class MIPSAssembler {
 		}
 
 		try {
-			//Milestone 1
-			String instruction = args[0];
-			InstructionParser parser = new InstructionParser(instruction);
-			String operation = parser.getOperation();
-			String[] arguments = parser.getArguments();
-
-			String machineCode = InstructionConverter.convertToMachineCode(operation, arguments);
-
-			System.out.println(machineCode);
+//			//Milestone 1
+//			String instruction = args[0];
+//			InstructionParser parser = new InstructionParser(instruction);
+//			String operation = parser.getOperation();
+//			String[] arguments = parser.getArguments();
+//
+//			String machineCode = InstructionConverter.convertToMachineCode(operation, arguments);
+//
+//			System.out.println(machineCode);
 			
 			//Milestone 2
 			String inputFile = args[0];
