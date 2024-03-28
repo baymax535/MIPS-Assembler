@@ -60,6 +60,13 @@ public class InstructionConverter {
       case "syscall":
         machineCode = "00000000000000000000000000001100"; // Fixed syscall opcode
         break;
+      case "move":
+        machineCode = formatRType("000000", arguments[1], "$zero", arguments[0], "00000", "100000");
+        break;
+          
+      case "li":
+        machineCode = formatIType("001101", "$zero", arguments[0], arguments[1]);
+        break;
       default:
         System.err.println("Unsupported operation: " + operation);
         break;
