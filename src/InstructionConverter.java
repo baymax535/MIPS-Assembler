@@ -62,14 +62,12 @@ public class InstructionConverter {
         machineCode = "00000000000000000000000000001100"; // Fixed syscall opcode
         break;
         //TODO
-      case "move"://TODO
-      case "li"://TODO
-      case "la"://TODO
-      case "blt"://TODO
-    	//TODO
-        System.err.println("Pseudo-instruction '" + operation + "' is not fully supported yet.");
-        machineCode = "00000000000000000000000000001100"; // Fixed syscall opcode
-        break;
+//      case "move"://TODO
+//      case "li"://TODO
+//      case "la"://TODO
+//      case "blt"://TODO
+//    	//TODO
+//        break;//TODO
       default:
         System.err.println("Unsupported operation: " + operation);
         break;
