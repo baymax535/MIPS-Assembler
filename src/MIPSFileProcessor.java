@@ -46,6 +46,7 @@ public class MIPSFileProcessor {
     }
 
     private void processTextLine(String line) {
+   
         if (line.isEmpty() || line.startsWith("#")) return; // Ignore empty lines and comments
         
         if (line.contains(":")) { // Label handling
@@ -65,47 +66,43 @@ public class MIPSFileProcessor {
 
         String machineCode = InstructionConverter.convertToMachineCode(operation, arguments);
         textInstructions.add(machineCode);
-        textAddress += 4; // Increment text address by 4 bytes (size of one instruction)
+        textAddress += 4;// Increment text address by 4 bytes (size of one instruction)
     }
 
     private void processDataLine(String line) {
-        if (line.isEmpty() || line.startsWith("#")) return; // Ignore empty lines and comments
-
-        // Logic to process .data section lines and calculate addresses
-        // This example only handles .asciiz data type for simplicity
-        if (line.contains(".asciiz")) {
-            String label = line.substring(0, line.indexOf(':')).trim();
-            String stringValue = line.substring(line.indexOf('"') + 1, line.lastIndexOf('"'));
-            int dataSize = stringValue.length() + 1; // +1 for the null terminator
-            dataInstructions.add(stringValue); // For simplicity, adding the string value directly
-            labelAddresses.put(label, dataAddress);
-            dataAddress += dataSize; // Increment data address by the size of the data
-        }
+    		if (line.isEmpty() || line.startsWith("#")) return;
+            if (line.contains(".asciiz")) {
+                String stringValue = line.substring(line.indexOf('"') + 1, line.lastIndexOf('"'));
+                dataInstructions.add(stringToHexAscii(stringValue));
+            }
     }
 
     private StringBuilder generateTextSection() {
-        StringBuilder textSection = new StringBuilder();
-        for (String instruction : textInstructions) {
-            textSection.append(instruction).append("\n");
-        }
-        return textSection;
+        StringBuilder section = new StringBuilder();
+        textInstructions.forEach(instruction -> section.append(instruction).append("\n"));
+        return section;
     }
 
     private StringBuilder generateDataSection() {
-        StringBuilder dataSection = new StringBuilder();
-        for (String data : dataInstructions) {
-            // Conversion to hex and formatting should be added here based on data type
-            // This example directly adds the string for simplicity
-            dataSection.append(data).append("\n");
-        }
-        return dataSection;
+        StringBuilder section = new StringBuilder();
+        dataInstructions.forEach(instruction -> section.append(instruction).append("\n"));
+        return section;
     }
 
-    private void writeOutputFiles(String outputFilePath, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
+    private void writeOutputFiles(String outputPath, String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
             writer.write(content);
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
+    }
+
+    private String stringToHexAscii(String input) {
+        StringBuilder output = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            output.append(String.format("%02x", (int) c));
+        }
+        output.append("00"); // Null terminator for .asciiz
+        return output.toString();
     }
 }

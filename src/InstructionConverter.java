@@ -8,6 +8,7 @@ public class InstructionConverter {
    * @return A string representing the machine code in hexadecimal format.
    */
   public static String convertToMachineCode(String operation, String[] arguments) {
+
     String machineCode = "";
 
     switch (operation) {
@@ -60,12 +61,14 @@ public class InstructionConverter {
       case "syscall":
         machineCode = "00000000000000000000000000001100"; // Fixed syscall opcode
         break;
-      case "move":
-        machineCode = formatRType("000000", arguments[1], "$zero", arguments[0], "00000", "100000");
-        break;
-          
-      case "li":
-        machineCode = formatIType("001101", "$zero", arguments[0], arguments[1]);
+        //TODO
+      case "move"://TODO
+      case "li"://TODO
+      case "la"://TODO
+      case "blt"://TODO
+    	//TODO
+        System.err.println("Pseudo-instruction '" + operation + "' is not fully supported yet.");
+        machineCode = "00000000000000000000000000001100"; // Fixed syscall opcode
         break;
       default:
         System.err.println("Unsupported operation: " + operation);
@@ -73,6 +76,7 @@ public class InstructionConverter {
     }
 
     return Util.binaryToHex(machineCode);
+ 
   }
 
    /**
