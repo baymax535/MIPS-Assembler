@@ -31,7 +31,7 @@ public class InstructionConverter {
           String label = arguments[2];
           int targetAddress = labelAddresses.getOrDefault(label, 0);
           int offset = (targetAddress - currentAddress - 4) / 4;
-          machineCode = formatIType("000100", rs, rt, Integer.toString(offset));
+          machineCode = formatIType("000100", arguments[0], arguments[1], Integer.toString(offset));
           break;
       case "bne":
           rs = arguments[0];
@@ -43,12 +43,12 @@ public class InstructionConverter {
           break;
       case "j":
           label = arguments[0];
-          targetAddress = labelAddresses.getOrDefault(label, 0);
+          targetAddress = labelAddresses.getOrDefault(label, 0) / 4;
           machineCode = formatJType("000010", Integer.toString(targetAddress));
           break;
       case "lui":
-        machineCode = formatIType("001111", "00000", arguments[0], arguments[1]);
-        break;
+    	    machineCode = formatIType("001111", "$zero", arguments[0], arguments[1]);
+    	    break;
       case "lw":
         
         String[] lwParts = arguments[1].split("\\("); // Split at the opening parenthesis
@@ -72,8 +72,8 @@ public class InstructionConverter {
         machineCode = formatIType("101011", arguments[2], arguments[0], arguments[1]);
         break;
       case "syscall":
-        machineCode = "00000000000000000000000000001100"; // Fixed syscall opcode
-        break;
+    	machineCode = "000000" + "00000" + "00000" + "00000" + "00000" + "001100";
+    	break;
       case "move":
         machineCode = formatRType("000000",arguments[1], "$zero", arguments[0], "00000", "100001");
         break;
@@ -87,7 +87,7 @@ public class InstructionConverter {
     	                      formatIType("001101", register, register, lower);
     	    } else {
     	        // Handle the case when the immediate value is less than 4 characters
-    	        machineCode = formatIType("001101", "$zero", register, immediate);
+    	        machineCode = formatIType("001001", "$zero", register, immediate);
     	    }
     	    break;
       case "la":
@@ -113,7 +113,7 @@ public class InstructionConverter {
         break;
     }
 
-    return Util.binaryToHex(machineCode);
+    return Util.formatOutput(Util.binaryToHex(machineCode));
  
   }
 
@@ -126,8 +126,8 @@ public class InstructionConverter {
    * instruction.
    */
   private static String formatRType(String opcode, String rs, String rt, String rd, String shamt, String funct) {
-    return opcode + Util.registerToBinary(rs) + Util.registerToBinary(rt) + Util.registerToBinary(rd) + shamt + funct;
-  }
+	    return opcode + Util.registerToBinary(rs) + Util.registerToBinary(rt) + Util.registerToBinary(rd) + shamt + funct;
+	}
 
    /**
    * Converts an I-type MIPS instruction to its machine code representation.
