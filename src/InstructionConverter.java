@@ -1,3 +1,4 @@
+import java.util.Map;
 
 public class InstructionConverter {
   /**
@@ -7,7 +8,7 @@ public class InstructionConverter {
    * operands of the MIPS instruction.
    * @return A string representing the machine code in hexadecimal format.
    */
-  public static String convertToMachineCode(String operation, String[] arguments) {
+  public static String convertToMachineCode(String operation, String[] arguments, Map<String, Integer> labelAddresses,int currentAddress) {
 
     String machineCode = "";
 
@@ -16,8 +17,8 @@ public class InstructionConverter {
         machineCode = formatRType("000000", arguments[1], arguments[2], arguments[0], "00000", "100000");
         break;
       case "addiu":
-        machineCode = formatIType("001001", arguments[1], arguments[0], arguments[2]);
-        break;
+          machineCode = formatIType("001001", arguments[1], arguments[0], arguments[2]);
+          break;
       case "and":
         machineCode = formatRType("000000", arguments[1], arguments[2], arguments[0], "00000", "100100");
         break;
@@ -25,14 +26,26 @@ public class InstructionConverter {
         machineCode = formatIType("001100", arguments[1], arguments[0], arguments[2]);
         break;
       case "beq":
-        machineCode = formatIType("000100", arguments[0], arguments[1], arguments[2]);
-        break;
+          String rs = arguments[0];
+          String rt = arguments[1];
+          String label = arguments[2];
+          int targetAddress = labelAddresses.getOrDefault(label, 0);
+          int offset = (targetAddress - currentAddress - 4) / 4;
+          machineCode = formatIType("000100", rs, rt, Integer.toString(offset));
+          break;
       case "bne":
-        machineCode = formatIType("000101", arguments[0], arguments[1], arguments[2]);
-        break;
+          rs = arguments[0];
+          rt = arguments[1];
+          label = arguments[2];
+          targetAddress = labelAddresses.getOrDefault(label, 0);
+          offset = (targetAddress - currentAddress - 4) / 4;
+          machineCode = formatIType("000101", rs, rt, Integer.toString(offset));
+          break;
       case "j":
-        machineCode = formatJType("000010", arguments[0]);
-        break;
+          label = arguments[0];
+          targetAddress = labelAddresses.getOrDefault(label, 0);
+          machineCode = formatJType("000010", Integer.toString(targetAddress));
+          break;
       case "lui":
         machineCode = formatIType("001111", "00000", arguments[0], arguments[1]);
         break;
@@ -61,13 +74,40 @@ public class InstructionConverter {
       case "syscall":
         machineCode = "00000000000000000000000000001100"; // Fixed syscall opcode
         break;
-        //TODO
-//      case "move"://TODO
-//      case "li"://TODO
-//      case "la"://TODO
-//      case "blt"://TODO
-//    	//TODO
-//        break;//TODO
+      case "move":
+        machineCode = formatRType("000000",arguments[1], "$zero", arguments[0], "00000", "100001");
+        break;
+      case "li":
+    	  	String immediate = arguments[1];
+    	    String register = arguments[0];
+    	    if (immediate.length() >= 4) {
+    	        String upper = immediate.substring(0, immediate.length() - 4);
+    	        String lower = immediate.substring(immediate.length() - 4);
+    	        machineCode = formatIType("001111", "$zero", register, upper) + "\n" +
+    	                      formatIType("001101", register, register, lower);
+    	    } else {
+    	        // Handle the case when the immediate value is less than 4 characters
+    	        machineCode = formatIType("001101", "$zero", register, immediate);
+    	    }
+    	    break;
+      case "la":
+    	  label = arguments[1];
+          register = arguments[0];
+          int address = labelAddresses.getOrDefault(label, 0);
+          String upper = String.format("%04x", address >>> 16);
+          String lower = String.format("%04x", address & 0xFFFF);
+          String luiInstruction = formatIType("001111", "$zero", register, upper);
+          String oriInstruction = formatIType("001101", register, register, lower);
+          machineCode = luiInstruction + oriInstruction;
+          break;
+      case "blt":
+          rs = arguments[0];
+          rt = arguments[1];
+          String offsets = arguments[2];
+          machineCode = formatRType("000000", rs, rt, "$at", "00000", "101010") + "\n" +
+                        formatIType("000101", "$at", "$zero", offsets);
+          break;
+
       default:
         System.err.println("Unsupported operation: " + operation);
         break;

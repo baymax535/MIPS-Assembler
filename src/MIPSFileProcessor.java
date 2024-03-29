@@ -46,7 +46,6 @@ public class MIPSFileProcessor {
     }
 
     private void processTextLine(String line) {
-   
         if (line.isEmpty() || line.startsWith("#")) return; // Ignore empty lines and comments
         
         if (line.contains(":")) { // Label handling
@@ -64,9 +63,12 @@ public class MIPSFileProcessor {
         String operation = parser.getOperation();
         String[] arguments = parser.getArguments();
 
-        String machineCode = InstructionConverter.convertToMachineCode(operation, arguments);
+        String machineCode = InstructionConverter.convertToMachineCode(operation, arguments, labelAddresses, textAddress);
         textInstructions.add(machineCode);
-        textAddress += 4;// Increment text address by 4 bytes (size of one instruction)
+
+        // Update textAddress based on the number of instructions generated
+        int instructionCount = machineCode.split("\n").length;
+        textAddress += 4 * instructionCount;
     }
 
     private void processDataLine(String line) {
@@ -85,8 +87,26 @@ public class MIPSFileProcessor {
 
     private StringBuilder generateDataSection() {
         StringBuilder section = new StringBuilder();
-        dataInstructions.forEach(instruction -> section.append(instruction).append("\n"));
+
+        for (String instruction : dataInstructions) {
+            for (int i = 0; i < instruction.length(); i += 8) {
+                String word = instruction.substring(i, Math.min(i + 8, instruction.length()));
+                String littleEndianWord = reverseByteOrder(word);
+                section.append(littleEndianWord).append(System.lineSeparator());
+            }
+        }
+
         return section;
+    }
+
+    private String reverseByteOrder(String word) {
+        StringBuilder reversed = new StringBuilder();
+
+        for (int i = word.length() - 2; i >= 0; i -= 2) {
+            reversed.append(word.substring(i, i + 2));
+        }
+
+        return reversed.toString();
     }
 
     private void writeOutputFiles(String outputPath, String content) {
