@@ -88,12 +88,28 @@ public class MIPSFileProcessor {
     private StringBuilder generateDataSection() {
         StringBuilder section = new StringBuilder();
 
+        int maxAddress = 0x10010000 + 1024 * 4; // Maximum address in the .data section
+        int currentAddress = 0x10010000;
+
         for (String instruction : dataInstructions) {
-            for (int i = 0; i < instruction.length(); i += 8) {
-                String word = instruction.substring(i, Math.min(i + 8, instruction.length()));
+            int instructionLength = instruction.length();
+
+            for (int i = 0; i < instructionLength; i += 8) {
+                String word = instruction.substring(i, Math.min(i + 8, instructionLength));
                 String littleEndianWord = reverseByteOrder(word);
                 section.append(littleEndianWord).append(System.lineSeparator());
+                currentAddress += 4;
             }
+
+            if (instructionLength % 8 != 0) {
+                section.append("00").append(System.lineSeparator());
+                currentAddress += 4;
+            }
+        }
+
+        while (currentAddress < maxAddress) {
+            section.append("00000000").append(System.lineSeparator());
+            currentAddress += 4;
         }
 
         return section;

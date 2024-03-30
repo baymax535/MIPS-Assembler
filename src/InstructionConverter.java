@@ -84,7 +84,7 @@ public class InstructionConverter {
     	        String upper = immediate.substring(0, immediate.length() - 4);
     	        String lower = immediate.substring(immediate.length() - 4);
     	        machineCode = formatIType("001111", "$zero", register, upper) + "\n" +
-    	                      formatIType("001101", register, register, lower);
+                        formatIType("001101", register, register, lower);
     	    } else {
     	        // Handle the case when the immediate value is less than 4 characters
     	        machineCode = formatIType("001001", "$zero", register, immediate);
@@ -98,14 +98,14 @@ public class InstructionConverter {
           String lower = String.format("%04x", address & 0xFFFF);
           String luiInstruction = formatIType("001111", "$zero", register, upper);
           String oriInstruction = formatIType("001101", register, register, lower);
-          machineCode = luiInstruction + oriInstruction;
+          machineCode = luiInstruction + "\n" + oriInstruction;
           break;
       case "blt":
           rs = arguments[0];
           rt = arguments[1];
           String offsets = arguments[2];
           machineCode = formatRType("000000", rs, rt, "$at", "00000", "101010") + "\n" +
-                        formatIType("000101", "$at", "$zero", offsets);
+                  formatIType("000101", "$at", "$zero", offsets);
           break;
 
       default:

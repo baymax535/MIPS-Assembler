@@ -82,7 +82,15 @@ public class Util {
     }
 
     public static String binaryToHex(String binary) {
-        long decimal = Long.parseLong(binary, 2);
-        return String.format("%08x", decimal);
+        StringBuilder hex = new StringBuilder();
+        int chunkSize = 32;
+        binary = binary.replaceAll("\\s+", ""); // Remove all whitespace characters
+        for (int i = 0; i < binary.length(); i += chunkSize) {
+            String chunk = binary.substring(i, Math.min(i + chunkSize, binary.length()));
+            String hexChunk = String.format("%08x", Long.parseLong(chunk, 2));
+            hex.append(hexChunk);
+        }
+
+        return hex.toString();
     }
 }
