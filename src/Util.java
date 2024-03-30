@@ -54,20 +54,9 @@ public class Util {
         return String.format("%5s", Integer.toBinaryString(number)).replace(' ', '0');
     }
 
-    public static String immediateToBinary(String immediate, int bitLength) {
-        int value;
-        if (immediate.startsWith("0x")) {
-            value = Integer.parseInt(immediate.substring(2), 16);
-        } else {
-            value = Integer.parseInt(immediate);
-        }
-        String binaryString = Integer.toBinaryString(0xFFFF & value);
-        if (binaryString.length() > bitLength) {
-            binaryString = binaryString.substring(binaryString.length() - bitLength);
-        } else {
-            binaryString = String.format("%" + bitLength + "s", binaryString).replace(' ', '0');
-        }
-        return binaryString;
+    public static String immediateToBinary(int immediate, int bitLength) {
+        String binaryString = Integer.toBinaryString(immediate & ((1 << bitLength) - 1));
+        return String.format("%" + bitLength + "s", binaryString).replace(' ', '0');
     }
 
     public static String addressToBinary(String address, int bitLength) {
@@ -84,13 +73,21 @@ public class Util {
     public static String binaryToHex(String binary) {
         StringBuilder hex = new StringBuilder();
         int chunkSize = 32;
+
         binary = binary.replaceAll("\\s+", ""); // Remove all whitespace characters
-        for (int i = 0; i < binary.length(); i += chunkSize) {
-            String chunk = binary.substring(i, Math.min(i + chunkSize, binary.length()));
-            String hexChunk = String.format("%08x", Long.parseLong(chunk, 2));
-            hex.append(hexChunk);
+
+        // Pad the binary string with zeros if necessary
+        int paddingLength = chunkSize - (binary.length() % chunkSize);
+        if (paddingLength < chunkSize) {
+            binary = String.format("%" + paddingLength + "s", "").replace(' ', '0') + binary;
         }
 
-        return hex.toString();
+        for (int i = 0; i < binary.length(); i += chunkSize) {
+            String chunk = binary.substring(i, i + chunkSize);
+            String hexChunk = String.format("%08x", Long.parseLong(chunk, 2));
+            hex.append(hexChunk).append("\n");
+        }
+
+        return hex.toString().trim();
     }
 }
