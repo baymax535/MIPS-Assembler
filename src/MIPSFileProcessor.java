@@ -51,24 +51,21 @@ public class MIPSFileProcessor {
         if (line.contains(":")) { // Label handling
             String label = line.substring(0, line.indexOf(':')).trim();
             labelAddresses.put(label, textAddress);
-            if (line.length() > line.indexOf(':') + 1) {
-                line = line.substring(line.indexOf(':') + 1).trim(); // Continue processing if there's more after the label
-            } else {
-                return; // Only a label on this line
-            }
+            line = line.substring(line.indexOf(':') + 1).trim(); // Continue processing if there's more after the label
         }
 
-        // Assuming parseInstruction and convertToMachineCode methods exist and are functional
-        InstructionParser parser = new InstructionParser(line);
-        String operation = parser.getOperation();
-        String[] arguments = parser.getArguments();
+        if (!line.isEmpty()) {
+            InstructionParser parser = new InstructionParser(line);
+            String operation = parser.getOperation();
+            String[] arguments = parser.getArguments();
 
-        String machineCode = InstructionConverter.convertToMachineCode(operation, arguments, labelAddresses, textAddress);
-        textInstructions.add(machineCode);
+            String machineCode = InstructionConverter.convertToMachineCode(operation, arguments, labelAddresses, textAddress);
+            textInstructions.add(machineCode);
 
-        // Update textAddress based on the number of instructions generated
-        int instructionCount = machineCode.split("\n").length;
-        textAddress += 4 * instructionCount;
+            // Update textAddress based on the number of instructions generated
+            int instructionCount = machineCode.split("\n").length;
+            textAddress += 4 * instructionCount;
+        }
     }
 
     private void processDataLine(String line) {
@@ -91,24 +88,17 @@ public class MIPSFileProcessor {
         int maxAddress = 0x10010000 + 1024 * 4; // Maximum address in the .data section
         int currentAddress = 0x10010000;
 
-        for (String instruction : dataInstructions) {
-            int instructionLength = instruction.length();
-
-            for (int i = 0; i < instructionLength; i += 8) {
-                String word = instruction.substring(i, Math.min(i + 8, instructionLength));
-                String littleEndianWord = reverseByteOrder(word);
-                section.append(littleEndianWord).append(System.lineSeparator());
-                currentAddress += 4;
-            }
-
-            if (instructionLength % 8 != 0) {
-                section.append("00").append(System.lineSeparator());
+        for (String data : dataInstructions) {
+            String[] words = data.split("(?<=\\G.{8})"); // Split into words of 8 characters (4 bytes)
+            for (String word : words) {
+                String littleEndianWord = reverseByteOrder(word); // Convert to little endian
+                section.append(littleEndianWord).append("\n");
                 currentAddress += 4;
             }
         }
 
         while (currentAddress < maxAddress) {
-            section.append("00000000").append(System.lineSeparator());
+            section.append("00000000\n");
             currentAddress += 4;
         }
 

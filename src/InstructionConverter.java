@@ -36,7 +36,7 @@ public class InstructionConverter {
     	    String rt = arguments[1];
     	    String label = arguments[2];
     	    int targetAddress = labelAddresses.getOrDefault(label, 0);
-    	    int offset = (targetAddress - currentAddress-4) / 4;
+    	    int offset = (targetAddress - currentAddress - 4) / 4;
     	    machineCode = formatIType("000100", rs, rt, offset);
     	    break;
 
@@ -45,13 +45,13 @@ public class InstructionConverter {
     	    rt = arguments[1];
     	    label = arguments[2];
     	    targetAddress = labelAddresses.getOrDefault(label, 0);
-    	    offset = (targetAddress - currentAddress-4) / 4;
+    	    offset = (targetAddress - currentAddress - 4) / 4;
     	    machineCode = formatIType("000101", rs, rt, offset);
     	    break;
     	case "j":
-    		label = arguments[0];
+    	    label = arguments[0];
     	    targetAddress = labelAddresses.getOrDefault(label, 0);
-    	    machineCode = formatJType("000010", targetAddress >>> 2);
+    	    machineCode = formatJType("000010", targetAddress);
     	    break;
       case "lui":
     	    machineCode = formatIType("001111", "$zero", arguments[0], Integer.parseInt(arguments[1]));
@@ -84,25 +84,15 @@ public class InstructionConverter {
     	machineCode = "000000" + "00000" + "00000" + "00000" + "00000" + "001100";
     	break;
       case "move":
-    	    machineCode = formatRType("000000", arguments[1], "$zero", arguments[0], "00000", "100001");
+    	    machineCode = formatRType("000000", arguments[1], "$zero", arguments[0], "00000", "100000");
     	    break;
       case "li":
-    	  	String immediate = arguments[1];
+    	    String immediate = arguments[1];
     	    String register = arguments[0];
-    	    if (immediate.matches("-?\\d+")) { // Numeric immediate
-    	        machineCode = formatIType("001001", "$zero", register, Integer.parseInt(immediate));
-    	    } else { // Label or symbolic immediate value
-    	        targetAddress = labelAddresses.getOrDefault(immediate, 0);
-    	        int upperImmediate = targetAddress >>> 16;
-    	        int lowerImmediate = targetAddress & 0xFFFF;
-    	        if (upperImmediate != 0) {
-    	            machineCode = formatIType("001111", "$zero", register, upperImmediate) + "\n";
-    	        }
-    	        machineCode += formatIType("001101", register, register, lowerImmediate);
-    	    }
+    	    machineCode = formatIType("001001", "$zero", register, Integer.parseInt(immediate));
     	    break;
       case "la":
-    	  register = arguments[0];
+    	    register = arguments[0];
     	    label = arguments[1];
     	    targetAddress = labelAddresses.getOrDefault(label, 0);
     	    int upperImmediate = targetAddress >>> 16;
@@ -157,7 +147,7 @@ public class InstructionConverter {
    * instruction.
    */
   private static String formatJType(String opcode, int address) {
-	    String binaryAddress = Util.immediateToBinary(address, 26);
+	    String binaryAddress = Util.immediateToBinary(address / 4, 26);
 	    return opcode + binaryAddress;
 	}
 
